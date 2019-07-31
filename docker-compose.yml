@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  api:
+    image: vvelikodny/ff-go-test
+    ports:
+      - 8080:8080
+    volumes:
+      - /etc/ssl/certs:/etc/ssl/certs
+    restart: always
