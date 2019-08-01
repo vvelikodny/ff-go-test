@@ -50,6 +50,38 @@ func TestEmptyCheckRequestError(t *testing.T) {
 	require.Contains(t, m.Message, "checkSessionKey: non zero value required")
 }
 
+func TestWrongCheckType(t *testing.T) {
+	app := NewApp(services.NewInMemSessionService())
+
+	req, _ := http.NewRequest(http.MethodPost, "/isgood", bytes.NewBuffer([]byte(`[{"checkType": "DEVICE1","activityType": "LOGIN","checkSessionKey": "123"}]`)))
+	response := executeRequest(t, app, req)
+	require.Equal(t, http.StatusInternalServerError, response.Code)
+
+	var m errors.HTTPErrorResponse
+	require.NoError(t, json.NewDecoder(response.Body).Decode(&m))
+	require.Contains(t, m.Message, "checkType should be either DEVICE|BIOMETRIC|COMBO")
+}
+
+func TestWrongActivityType(t *testing.T) {
+	app := NewApp(services.NewInMemSessionService())
+
+	req, _ := http.NewRequest(http.MethodPost, "/isgood", bytes.NewBuffer([]byte(`[{"checkType": "DEVICE","activityType": "LOGIN1","checkSessionKey": "123"}]`)))
+	response := executeRequest(t, app, req)
+	require.Equal(t, http.StatusInternalServerError, response.Code)
+
+	var m errors.HTTPErrorResponse
+	require.NoError(t, json.NewDecoder(response.Body).Decode(&m))
+	require.Contains(t, m.Message, "activityType should start with '_' or equal either SIGNUP|LOGIN|PAYMENT|CONFIRMATION")
+}
+
+func TestActivityTypeUnderscore(t *testing.T) {
+	app := NewApp(services.NewInMemSessionService())
+
+	req, _ := http.NewRequest(http.MethodPost, "/isgood", bytes.NewBuffer([]byte(`[{"checkType": "DEVICE","activityType": "_LOGIN_1","checkSessionKey": "123"}]`)))
+	response := executeRequest(t, app, req)
+	require.Equal(t, http.StatusOK, response.Code)
+}
+
 func TestDuplicateSessionKey(t *testing.T) {
 	app := NewApp(services.NewInMemSessionService())
 

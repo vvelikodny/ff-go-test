@@ -62,8 +62,8 @@ type deviceCheckRequestList []deviceCheckRequest
 
 // deviceCheckRequest represents item of check request to universal SDK
 type deviceCheckRequest struct {
-	CheckType       string `json:"checkType" valid:"in(DEVICE|BIOMETRIC|COMBO),required"`
-	ActivityType    string `json:"activityType" valid:"activityType~Should start with '_' or equal either SIGNUP|LOGIN|PAYMENT|CONFIRMATION,required"`
+	CheckType       string `json:"checkType" valid:"in(DEVICE|BIOMETRIC|COMBO)~checkType should be either DEVICE|BIOMETRIC|COMBO,required"`
+	ActivityType    string `json:"activityType" valid:"activityType~activityType should start with '_' or equal either SIGNUP|LOGIN|PAYMENT|CONFIRMATION,required"`
 	CheckSessionKey string `json:"checkSessionKey" valid:"required"`
 }
 
