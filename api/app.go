@@ -67,7 +67,7 @@ type deviceCheckRequest struct {
 	CheckSessionKey string `json:"checkSessionKey" valid:"required"`
 }
 
-type deviceChecResponse struct {
+type deviceCheckResponse struct {
 	Puppy bool `json:"puppy"`
 }
 
@@ -93,7 +93,7 @@ func (app *App) isGoodHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	if err := json.NewEncoder(w).Encode(&deviceChecResponse{Puppy: true}); err != nil {
+	if err := json.NewEncoder(w).Encode(&deviceCheckResponse{Puppy: true}); err != nil {
 		errors.HTTPError(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
