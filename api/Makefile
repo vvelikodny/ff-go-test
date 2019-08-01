@@ -18,6 +18,7 @@ test:
 	go test ./...
 
 lint:
+	@go get -u golang.org/x/lint/golint
 	@go list ./... | grep -v /vendor/ | xargs -L1 golint -set_exit_status
 
 .PHONY: deploy-local

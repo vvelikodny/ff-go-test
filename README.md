@@ -1,10 +1,10 @@
 [![Build Status](https://travis-ci.com/vvelikodny/ff-go-test.svg?branch=master)](https://travis-ci.com/vvelikodny/ff-go-test)
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/vvelikodny/ff-go-test)](https://cloud.docker.com/repository/docker/vvelikodny/ff-go-test)
 
 ## Roles
 
 Developer __Vitaly Velikodny__
   * [@vvelikodny](https://github.com/vvelikodny)
-  * [vvelikodny@gmail.com](mailto:vvelikodny@gmail.com)  
 
 ## Requirements:
   * `docker`
