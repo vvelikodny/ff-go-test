@@ -7,17 +7,15 @@ Developer __Vitaly Velikodny__
   * [vvelikodny@gmail.com](mailto:vvelikodny@gmail.com)  
 
 ## Requirements:
-  * `go`
   * `docker`
   * `docker-compose`
-  * `go get -u golang.org/x/lint/golint`
   
 ## Deploy process (locally)
 
 Build services and run Docker containers
 
 ```bash
-make run-env
+make deploy-local
 ```
 
 ## Demo
@@ -25,7 +23,7 @@ make run-env
 Add news
 
 ```bash
-curl -X POST http://localhost:8080/isgood
+curl -X POST http://localhost:8080/isgood \
   -H "Content-Type: application/json" \
   -d '[{"checkType": "DEVICE","activityType": "SIGNUP","checkSessionKey": "string","activityData": [{"kvpKey": "ip.address","kvpValue": "1.23.45.123","kvpType": "general.string"}]}]'
 ```

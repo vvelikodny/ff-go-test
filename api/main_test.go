@@ -37,7 +37,7 @@ func TestBadCheckRequestError(t *testing.T) {
 func TestEmptyCheckRequestError(t *testing.T) {
 	app := NewApp(services.NewInMemSessionService())
 
-	req, _ := http.NewRequest(http.MethodPost, "/isgood", bytes.NewBuffer([]byte(`{}`)))
+	req, _ := http.NewRequest(http.MethodPost, "/isgood", bytes.NewBuffer([]byte(`[{}]`)))
 	response := executeRequest(t, app, req)
 	require.Equal(t, http.StatusInternalServerError, response.Code)
 
@@ -53,11 +53,11 @@ func TestEmptyCheckRequestError(t *testing.T) {
 func TestDuplicateSessionKey(t *testing.T) {
 	app := NewApp(services.NewInMemSessionService())
 
-	req, _ := http.NewRequest(http.MethodPost, "/isgood", bytes.NewBuffer([]byte(`{"checkType": "DEVICE","activityType": "LOGIN","checkSessionKey": "123"}`)))
+	req, _ := http.NewRequest(http.MethodPost, "/isgood", bytes.NewBuffer([]byte(`[{"checkType": "DEVICE","activityType": "LOGIN","checkSessionKey": "123"}]`)))
 	response := executeRequest(t, app, req)
 	require.Equal(t, http.StatusOK, response.Code)
 
-	req, _ = http.NewRequest(http.MethodPost, "/isgood", bytes.NewBuffer([]byte(`{"checkType": "DEVICE","activityType": "LOGIN","checkSessionKey": "123"}`)))
+	req, _ = http.NewRequest(http.MethodPost, "/isgood", bytes.NewBuffer([]byte(`[{"checkType": "DEVICE","activityType": "LOGIN","checkSessionKey": "123"}]`)))
 	response = executeRequest(t, app, req)
 	require.Equal(t, http.StatusInternalServerError, response.Code)
 

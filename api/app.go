@@ -57,7 +57,10 @@ func (app *App) Run() {
 	log.Fatal(http.ListenAndServe(":8080", app.Router))
 }
 
-// deviceCheckRequest represents
+// deviceCheckRequest represents list of items of check request to universal SDK
+type deviceCheckRequestList []deviceCheckRequest
+
+// deviceCheckRequest represents item of check request to universal SDK
 type deviceCheckRequest struct {
 	CheckType       string `json:"checkType" valid:"in(DEVICE|BIOMETRIC|COMBO),required"`
 	ActivityType    string `json:"activityType" valid:"activityType~Should start with '_' or equal either SIGNUP|LOGIN|PAYMENT|CONFIRMATION,required"`
@@ -70,20 +73,22 @@ type deviceChecResponse struct {
 
 // isGoodHandler
 func (app *App) isGoodHandler(w http.ResponseWriter, r *http.Request) {
-	var n deviceCheckRequest
+	var n deviceCheckRequestList
 	if err := json.NewDecoder(r.Body).Decode(&n); err != nil {
 		errors.HTTPError(w, fmt.Sprintf("JSON parsing error: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	if _, err := govalidator.ValidateStruct(n); err != nil {
-		errors.HTTPError(w, fmt.Sprintf("New entity validation error: %v", err), http.StatusInternalServerError)
-		return
-	}
+	for _, device := range n {
+		if _, err := govalidator.ValidateStruct(device); err != nil {
+			errors.HTTPError(w, fmt.Sprintf("New entity validation error: %v", err), http.StatusInternalServerError)
+			return
+		}
 
-	if !app.sessionService.Register(n.CheckSessionKey) {
-		errors.HTTPError(w, fmt.Sprintf("Session key already registered: %v", n.CheckSessionKey), http.StatusInternalServerError)
-		return
+		if !app.sessionService.Register(device.CheckSessionKey) {
+			errors.HTTPError(w, fmt.Sprintf("Session key already registered: %v", device.CheckSessionKey), http.StatusInternalServerError)
+			return
+		}
 	}
 
 	w.Header().Set("Content-Type", "application/json")

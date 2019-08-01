@@ -3,17 +3,17 @@ all: build
 build:
 	make -C api
 
-run-env: build
-	make -C api
+run: build
+	make -C api docker-build
 	@docker-compose up -d
 
 test:
 	make -C api test
 
-stop-env:
+stop:
 	@docker-compose stop
 	@docker-compose rm
 
-deploy-local: run-env
+deploy-local: run
 
 .PHONY: deploy-local
