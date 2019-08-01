@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/vvelikodny/ff-go-test.svg?branch=master)](https://travis-ci.com/vvelikodny/ff-go-test)
+![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/vvelikodny/ff-go-test)
 
 ## Roles
 
