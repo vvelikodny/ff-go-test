@@ -22,7 +22,7 @@ func NewInMemSessionService() SessionService {
 }
 
 // Register registers new key
-// Return true if ket registered, otherwise false
+// Return true if key registered, otherwise false
 func (s *inMemSessionService) Register(key string) bool {
 	s.mux.Lock()
 	defer s.mux.Unlock()
