@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/vvelikodny/ff-go-test/api/services"
 	"log"
 	"net/http"
 	"strings"
@@ -12,6 +11,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/vvelikodny/ff-go-test/api/errors"
+	"github.com/vvelikodny/ff-go-test/api/services"
 )
 
 var (
@@ -75,18 +75,18 @@ type deviceCheckResponse struct {
 func (app *App) isGoodHandler(w http.ResponseWriter, r *http.Request) {
 	var n deviceCheckRequestList
 	if err := json.NewDecoder(r.Body).Decode(&n); err != nil {
-		errors.HTTPError(w, fmt.Sprintf("JSON parsing error: %v", err), http.StatusInternalServerError)
+		errors.HTTPError(w, fmt.Sprintf("JSON parsing error: %v", err), http.StatusBadRequest)
 		return
 	}
 
 	for _, device := range n {
 		if _, err := govalidator.ValidateStruct(device); err != nil {
-			errors.HTTPError(w, fmt.Sprintf("New entity validation error: %v", err), http.StatusInternalServerError)
+			errors.HTTPError(w, fmt.Sprintf("New entity validation error: %v", err), http.StatusBadRequest)
 			return
 		}
 
 		if !app.sessionService.Register(device.CheckSessionKey) {
-			errors.HTTPError(w, fmt.Sprintf("Session key already registered: %v", device.CheckSessionKey), http.StatusInternalServerError)
+			errors.HTTPError(w, fmt.Sprintf("Session key already registered: %v", device.CheckSessionKey), http.StatusBadRequest)
 			return
 		}
 	}
