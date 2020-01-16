@@ -8,7 +8,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-
 	"github.com/vvelikodny/ff-go-test/api/errors"
 	"github.com/vvelikodny/ff-go-test/api/services"
 )
@@ -30,7 +29,7 @@ func TestBadCheckRequestError(t *testing.T) {
 	var m errors.HTTPErrorResponse
 	require.NoError(t, json.NewDecoder(response.Body).Decode(&m))
 
-	require.Equal(t, m.Code, http.StatusInternalServerError)
+	require.Equal(t, http.StatusBadRequest, m.Code)
 	require.Contains(t, m.Message, "JSON parsing error")
 }
 
@@ -44,7 +43,7 @@ func TestEmptyCheckRequestError(t *testing.T) {
 	var m errors.HTTPErrorResponse
 	require.NoError(t, json.NewDecoder(response.Body).Decode(&m))
 
-	require.Equal(t, m.Code, http.StatusInternalServerError)
+	require.Equal(t, m.Code, http.StatusBadRequest)
 	require.Contains(t, m.Message, "checkType: non zero value required")
 	require.Contains(t, m.Message, "activityType: non zero value require")
 	require.Contains(t, m.Message, "checkSessionKey: non zero value required")

@@ -1,9 +1,10 @@
 package services_test
 
 import (
+	"testing"
+
 	"github.com/stretchr/testify/require"
 	"github.com/vvelikodny/ff-go-test/api/services"
-	"testing"
 )
 
 func TestNewInMemSessionService(t *testing.T) {
