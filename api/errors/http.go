@@ -14,7 +14,7 @@ type HTTPErrorResponse struct {
 // HTTPError replies as response with specific message & HTTP code.
 func HTTPError(w http.ResponseWriter, err string, code int) {
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusInternalServerError)
+	w.WriteHeader(code)
 	_ = json.NewEncoder(w).Encode(&HTTPErrorResponse{
 		Code:    code,
 		Message: err,

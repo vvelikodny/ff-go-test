@@ -24,7 +24,7 @@ func TestBadCheckRequestError(t *testing.T) {
 
 	req, _ := http.NewRequest(http.MethodPost, "/isgood", bytes.NewBuffer([]byte(``)))
 	response := executeRequest(t, app, req)
-	require.Equal(t, http.StatusInternalServerError, response.Code)
+	require.Equal(t, http.StatusBadRequest, response.Code)
 
 	var m errors.HTTPErrorResponse
 	require.NoError(t, json.NewDecoder(response.Body).Decode(&m))
@@ -38,7 +38,7 @@ func TestEmptyCheckRequestError(t *testing.T) {
 
 	req, _ := http.NewRequest(http.MethodPost, "/isgood", bytes.NewBuffer([]byte(`[{}]`)))
 	response := executeRequest(t, app, req)
-	require.Equal(t, http.StatusInternalServerError, response.Code)
+	require.Equal(t, http.StatusBadRequest, response.Code)
 
 	var m errors.HTTPErrorResponse
 	require.NoError(t, json.NewDecoder(response.Body).Decode(&m))
@@ -54,7 +54,7 @@ func TestWrongCheckType(t *testing.T) {
 
 	req, _ := http.NewRequest(http.MethodPost, "/isgood", bytes.NewBuffer([]byte(`[{"checkType": "DEVICE1","activityType": "LOGIN","checkSessionKey": "123"}]`)))
 	response := executeRequest(t, app, req)
-	require.Equal(t, http.StatusInternalServerError, response.Code)
+	require.Equal(t, http.StatusBadRequest, response.Code)
 
 	var m errors.HTTPErrorResponse
 	require.NoError(t, json.NewDecoder(response.Body).Decode(&m))
@@ -66,7 +66,7 @@ func TestWrongActivityType(t *testing.T) {
 
 	req, _ := http.NewRequest(http.MethodPost, "/isgood", bytes.NewBuffer([]byte(`[{"checkType": "DEVICE","activityType": "LOGIN1","checkSessionKey": "123"}]`)))
 	response := executeRequest(t, app, req)
-	require.Equal(t, http.StatusInternalServerError, response.Code)
+	require.Equal(t, http.StatusBadRequest, response.Code)
 
 	var m errors.HTTPErrorResponse
 	require.NoError(t, json.NewDecoder(response.Body).Decode(&m))
@@ -90,7 +90,7 @@ func TestDuplicateSessionKey(t *testing.T) {
 
 	req, _ = http.NewRequest(http.MethodPost, "/isgood", bytes.NewBuffer([]byte(`[{"checkType": "DEVICE","activityType": "LOGIN","checkSessionKey": "123"}]`)))
 	response = executeRequest(t, app, req)
-	require.Equal(t, http.StatusInternalServerError, response.Code)
+	require.Equal(t, http.StatusBadRequest, response.Code)
 
 	var m errors.HTTPErrorResponse
 	require.NoError(t, json.NewDecoder(response.Body).Decode(&m))
